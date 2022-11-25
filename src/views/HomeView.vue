@@ -76,18 +76,19 @@ export default {
 
     const getIpInfo = async () => {
       try{
-        const {data} = await axios.get(`https://geo.ipify.org/api/v2/country?apiKey=at_pjD1G6TUbkXoXBbZAZ0Cocs6158tD&ipAddress=${IP.value}`);
-        const res = await axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=052a5bca96b841fab06c8d1fd391a263&ip=${IP.value}`);
+        // const res = await axios.get(`https://geo.ipify.org/api/v2/country?apiKey=at_pjD1G6TUbkXoXBbZAZ0Cocs6158tD&ipAddress=${IP.value}`);
+        const {data} = await axios.get(`https://api.ipgeolocation.io/ipgeo?apiKey=052a5bca96b841fab06c8d1fd391a263&ip=${IP.value}`);
         IPinfo.value ={
           address: data.ip,
-          location: data.location.country,
-          timezone: data.location.timezone,
+          location: data.country_name,
+          timezone: data.time_zone.name,
           isp: data.isp
         };
         info.value = {
-          latitude: res.data.latitude,
-          longitude: res.data.longitude
+          latitude: data.latitude,
+          longitude: data.longitude
         }
+        // console.log(data)
         leaflet.marker([info.value.latitude, info.value.longitude]).addTo(mymap);
         mymap.setView([info.value.latitude, info.value.longitude], 13);
       }catch(err){console.log(err.message)}
